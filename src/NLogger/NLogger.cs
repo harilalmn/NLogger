@@ -1,4 +1,6 @@
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace NLoggerLib;
 
@@ -53,6 +55,15 @@ public static class NLogger
     /// </summary>
     public static void LogW(string message) => LogW(message, LogLevel.Info);
 
+    /// <summary>
+    /// Shows <paramref name="json"/> in the NLogger window, pretty-printed with two-space
+    /// indentation so nested structures are easy to read. Null is rendered as an empty object.
+    /// </summary>
+    public static void LogW(JsonObject json) => LogW(json, LogLevel.Info);
+
+    /// <summary>Window log of a pretty-printed JSON object with an explicit severity level.</summary>
+    public static void LogW(JsonObject json, LogLevel level) => LogW(FormatJson(json), level);
+
     /// <summary>Window log with an explicit severity level.</summary>
     public static void LogW(string message, LogLevel level)
     {
@@ -87,6 +98,16 @@ public static class NLogger
     /// </summary>
     public static string Log(string message) => Log(message, LogLevel.Info);
 
+    /// <summary>
+    /// Appends <paramref name="json"/> to the dated log file, pretty-printed with two-space
+    /// indentation so nested structures are easy to read. Returns the path written to
+    /// (empty string on failure). Null is rendered as an empty object.
+    /// </summary>
+    public static string Log(JsonObject json) => Log(json, LogLevel.Info);
+
+    /// <summary>File log of a pretty-printed JSON object with an explicit severity level.</summary>
+    public static string Log(JsonObject json, LogLevel level) => Log(FormatJson(json), level);
+
     /// <summary>File log with an explicit severity level.</summary>
     public static string Log(string message, LogLevel level)
     {
@@ -115,6 +136,28 @@ public static class NLogger
     {
         LogW(message, level);
         Log(message, level);
+    }
+
+    private static readonly JsonSerializerOptions IndentedJson = new() { WriteIndented = true };
+
+    /// <summary>
+    /// Renders a <see cref="JsonObject"/> as indented JSON. A null object becomes <c>{}</c>;
+    /// any serialization failure falls back to the object's default string representation so
+    /// logging never throws into the host application.
+    /// </summary>
+    private static string FormatJson(JsonObject? json)
+    {
+        if (json is null)
+            return "{}";
+
+        try
+        {
+            return json.ToJsonString(IndentedJson);
+        }
+        catch
+        {
+            return json.ToString();
+        }
     }
 
     private static void EnsureWindow()

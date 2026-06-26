@@ -6,6 +6,8 @@ A lightweight WPF logging utility for .NET. Reference one DLL and you get two wa
 |------|--------|
 | `NLogger.LogW(message)` | Shows the message in a window. Text is **read-only but fully selectable/copyable**. The window accumulates messages. |
 | `NLogger.Log(message)` | Appends the message to a **dated log file**. A *Log File Location* textbox + Browse button set the **root path**; NLogger creates a `YYYY-MMDD` folder underneath it. Defaults to `MyDocuments\NLogger`. |
+| `NLogger.LogW(jsonObject)` | Same as `LogW`, but accepts a `System.Text.Json.Nodes.JsonObject` and **pretty-prints it with indentation** so nested structures stay legible. |
+| `NLogger.Log(jsonObject)` | Same as `Log`, but accepts a `System.Text.Json.Nodes.JsonObject` and writes it **indented** to the dated log file. |
 
 Both methods are **thread-safe** and work from **any host** — WPF, WinForms, console apps, or services. If the host isn't a WPF app, NLogger spins up its own background UI thread automatically.
 
@@ -38,6 +40,12 @@ NLogger.LogBoth("Goes to both.", LogLevel.Warning); // both
 
 // Levels: Info (default), Warning, Error, Success
 NLogger.LogW("Something failed", LogLevel.Error);
+
+// JSON objects are pretty-printed with indentation (window or file):
+using System.Text.Json.Nodes;
+var payload = new JsonObject { ["id"] = 42, ["name"] = "widget", ["tags"] = new JsonArray("a", "b") };
+NLogger.LogW(payload);                  // shown indented in the window
+NLogger.Log(payload, LogLevel.Warning); // written indented to the file
 
 // Inspect / change where Log() writes (persisted across runs):
 string path = NLogger.LogFilePath;          // <root>\YYYY-MMDD\nlogger-YYYY-MMDD.log
