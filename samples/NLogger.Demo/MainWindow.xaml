@@ -1,0 +1,18 @@
+<Window x:Class="NLogger.Demo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NLogger Demo" Height="240" Width="420"
+        WindowStartupLocation="CenterScreen">
+    <StackPanel Margin="16">
+        <TextBlock Text="NLogger demo host" FontSize="16" FontWeight="Bold" Margin="0,0,0,12"/>
+        <TextBox x:Name="Input" Text="Hello from NLogger!" Margin="0,0,0,12" Padding="4"/>
+        <WrapPanel>
+            <Button Content="LogW (window)" Click="LogW_Click" Padding="10,6" Margin="0,0,8,8"/>
+            <Button Content="Log (file)" Click="Log_Click" Padding="10,6" Margin="0,0,8,8"/>
+            <Button Content="Log Both" Click="LogBoth_Click" Padding="10,6" Margin="0,0,8,8"/>
+            <Button Content="Warning" Click="Warn_Click" Padding="10,6" Margin="0,0,8,8"/>
+            <Button Content="Error" Click="Error_Click" Padding="10,6" Margin="0,0,8,8"/>
+        </WrapPanel>
+        <TextBlock x:Name="Status" Foreground="Gray" TextWrapping="Wrap" Margin="0,8,0,0"/>
+    </StackPanel>
+</Window>

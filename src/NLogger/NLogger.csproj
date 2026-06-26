@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>NLoggerLib</RootNamespace>
+    <AssemblyName>NLogger</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Version>1.0.0</Version>
+    <Authors>NLogger</Authors>
+    <Description>Lightweight WPF logging utility. Show messages in a selectable window (LogW) or write them to a dated log file (Log).</Description>
+  </PropertyGroup>
+
+</Project>

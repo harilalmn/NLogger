@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/NLogger.Demo/NLogger.Demo.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/NLogger/NLogger.csproj" />
+  </Folder>
+</Solution>
