@@ -138,6 +138,18 @@ public static class NLogger
         Log(message, level);
     }
 
+    // ---- Channels ------------------------------------------------------------
+
+    /// <summary>
+    /// A named log destination with a root of its own, leaving <see cref="LogRoot"/> -- and
+    /// everything else on the machine relying on it -- alone. For a component that has to
+    /// journal to a folder it owns; see <see cref="LogChannel"/>.
+    /// </summary>
+    public static LogChannel Channel(string name, string root) => LogChannel.Get(name, root);
+
+    /// <summary>A named channel under the shared <see cref="LogRoot"/>, in a file of its own.</summary>
+    public static LogChannel Channel(string name) => LogChannel.Get(name, LogRoot);
+
     private static readonly JsonSerializerOptions IndentedJson = new() { WriteIndented = true };
 
     /// <summary>
@@ -145,6 +157,8 @@ public static class NLogger
     /// any serialization failure falls back to the object's default string representation so
     /// logging never throws into the host application.
     /// </summary>
+    internal static string Render(JsonObject? json) => FormatJson(json);
+
     private static string FormatJson(JsonObject? json)
     {
         if (json is null)

@@ -25,7 +25,7 @@ samples/NLogger.Demo/   # a small WPF app that exercises the API
 dotnet build NLogger.slnx -c Release
 ```
 
-The library is produced at `src/NLogger/bin/Release/net10.0-windows/NLogger.dll`.
+The library is produced at `src/NLogger/bin/Release/net8.0-windows/NLogger.dll`.
 
 ## Use it
 
@@ -54,6 +54,27 @@ NLogger.LogRoot = @"D:\Logs";               // root path; dated folder created u
 
 NLogger.ShowWindow();                        // bring the window up without logging
 ```
+
+## Channels -- a folder of your own
+
+`LogRoot` is one setting shared by everything on the machine that uses NLogger, and it is
+persisted, so an application that points it elsewhere moves every other application's log
+with it. A **channel** is for a component that has to journal to a folder it owns -- an
+add-in hosted inside somebody else's process, say -- without disturbing that setting:
+
+```csharp
+var journal = NLogger.Channel("RCS", @"C:\Users\me\AppData\Roaming\RCS\Logs");
+
+journal.Log("session start");                 // <root>\YYYY-MMDD\RCS-YYYY-MMDD.log
+journal.Log(payload, LogLevel.Warning);       // JsonObject, indented
+journal.LogW("also in the window");           // shared window, tagged [RCS]
+
+journal.FilePath;                             // where it is writing right now
+```
+
+Nothing about a channel is written to `settings.json`. Asking for the same name and root
+again returns the same channel, so there is no need to hold on to it. The window is shared
+by every channel; only the file is per-channel.
 
 > Namespace note: the methods live on the type `NLoggerLib.NLogger`. The assembly/DLL is named `NLogger`. Use `using NLoggerLib;` and call `NLogger.LogW(...)`.
 
